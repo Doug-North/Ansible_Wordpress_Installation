@@ -1,0 +1,14 @@
+---
+# tasks file for wp-cli
+
+- name: Download WP-CLI
+  get_url:
+    url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    dest: "/usr/local/bin/wp"
+    validate_certs: no
+
+- name: Make WP-CLI executable
+  file:
+    path: /usr/local/bin/wp
+    mode: "0755"
+    #mode: u=rwx,g=rx,o=rx

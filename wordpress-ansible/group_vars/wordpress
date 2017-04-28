@@ -1,0 +1,20 @@
+# role: server
+remote_deploy_user: deploy
+remote_deploy_group: deploy
+remote_deploy_home: /home/deploy
+ssh_key_pub_path: /Users/paulgaylor/.ssh/id_rsa.pub
+
+# role: wordpress
+remote_www_dir: "/var/www"
+remote_wordpress_dir: "{{ remote_www_dir }}/wordpress"
+wordpress_db_name: wordpress
+wordpress_db_user: deploy
+wordpress_db_user_pass: deploypass
+wordpress_db_prefix: wp_
+wordpress_home_url: 46.101.155.92
+wordpress_site_title: Test Site
+wordpress_admin_user: admin
+wordpress_admin_user_pass: adminpass
+wordpress_admin_email: email@example.com
+
+mysql_root_password: ""

@@ -1,0 +1,65 @@
+---
+- name: First apt-get update
+  command: apt-get update
+
+- name: install python-apt (required to ansible apt module)
+  command: apt-get install python-apt -y
+
+- name: Update Apt
+  apt: update_cache=yes
+
+- name: Update apt cache
+  apt: update_cache=yes cache_valid_time=3600
+  sudo: yes
+
+- name: Check if anything needs autoremoving
+  shell: apt-get -y --dry-run autoremove | grep -q "0 to remove"
+  register: check_autoremove
+  ignore_errors: True
+  changed_when: False
+  always_run: True
+
+- name: Autoremove unused packages
+  command: apt-get -y autoremove
+  when: "check_autoremove.rc != 0"
+
+- name: Install useful software
+  apt: name="{{ item }}" state=present
+  with_items:
+  - sudo
+  - htop
+  - screen
+  - unzip
+
+- name: Install required software
+  apt: name={{ item }} state=present
+  sudo: yes
+  with_items:
+    - apache2
+    - mysql-server
+    - php
+    - php-mysql
+    - libapache2-mod-php7.0
+    - php-mcrypt
+    - python-mysqldb
+
+- name: Add {{ remote_deploy_group }} group
+  group:
+    name: "{{ remote_deploy_group }}"
+
+- name: Add {remote_deploy_user} user
+  user:
+    name: "{{ remote_deploy_user }}"
+    home: "{{ remote_deploy_home }}"
+    group: "{{ remote_deploy_group }}"
+
+- name: Add ssh keys to root and deploy accounts
+  authorized_key:
+    user: "{{ item }}"
+    key: "{{ lookup('file', ssh_key_pub_path) }}"
+  with_items:
+  - root
+  - "{{ remote_deploy_user }}"
+
+# tasks file for server
+
