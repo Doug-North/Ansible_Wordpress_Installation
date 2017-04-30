@@ -1,4 +1,4 @@
-# Ansible_Wordpress_Installation
+# Ansible Wordpress Installation
 
 
 Easy install of wordpress and signs in to a test-site.
